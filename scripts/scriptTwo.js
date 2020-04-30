@@ -2,55 +2,61 @@ alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n"
     "r", "s", "t", "u", "v", "w", "x", "y", "z", "æ", "ø", "å", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q",
     "r", "s", "t", "u", "v", "w", "x", "y", "z", "æ", "ø", "å"];
 
-//let cesarDeciphered = "";
-
+let inputKey = "a"
 let cesarString = "";
-let userString = "jegvilkoseisenga";
-let key = [1, 2, 3];
-let k = 0;
-function iterateString() {
-
-
-    for (let i = 0; i < userString.length; i++) {
-        for (let j = 0; j < alphabet.length; j++) {
-            if (userString[i] == alphabet[j]) {
-                cesarString += alphabet[j + key[k]];
-                break;
+let userString = "jeg møter deg bak stortinget med konvolutten!";
+let key = [];
+function getKey() {
+    for (let i = 0; i < inputKey.length; i++) {
+        for (k = 0; k < alphabet.length; k++) {
+            if (inputKey[i] == alphabet[k]) {
+                key.push(alphabet.indexOf(alphabet[k]));
+                k = alphabet.length;
             }
-        }
-        if (k == key.length - 1) {
-            k = 0;
-        }
-        else {
-            k++;
         }
     }
 }
-iterateString();
+
+function encryptText() {
+    for (let i = 0, g = 0; i < userString.length; i++, g++) {
+        if (g == key.length) {
+            g = 0;
+        }
+        for (let j = 0; j < alphabet.length; j++) {
+            if (userString[i] == alphabet[j]) {
+                cesarString += alphabet[j + key[g]];
+                j = alphabet.length;
+            }
+            if ((!/^[a-ø]/.test(userString[i]))) {
+                cesarString += userString[i];
+                j = alphabet.length;
+            }
+        }
+    }
+}
+getKey();
+encryptText();
 console.log(cesarString);
 
 let reversedAlphabet = alphabet.reverse();
 let decrypted = "";
-let encryptedString = "kgjwkolqvfkvfpjb";
-let keyToDecrypt = [1, 2, 3, 4];
-let f = 0;
-function iterateStringDecrypt() {
 
-
-    for (let i = 0; i < userString.length; i++) {
-        for (let j = 0; j < alphabet.length; j++) {
-            if (encryptedString[i] == alphabet[j]) {
-                decrypted += reversedAlphabet[j + keyToDecrypt[f]];
-                break;
+function decryptText() {
+for (let i = 0, g = 0; i < cesarString.length; i++, g++) {
+        if (g == key.length) {
+            g = 0;
+        }
+        for (let j = 0; j < reversedAlphabet.length; j++) {
+            if (cesarString[i] == alphabet[j]) {
+                decrypted += reversedAlphabet[j + key[g]];
+                j = reversedAlphabet.length;
             }
-        }
-        if (f == keyToDecrypt.length - 1) {
-            f = 0;
-        }
-        else {
-            f++;
+            if ((!/^[a-ø]/.test(cesarString[i]))) {
+                decrypted += cesarString[i];
+                j = reversedAlphabet.length;
+            }
         }
     }
 }
-iterateStringDecrypt();
+decryptText();
 console.log(decrypted);
